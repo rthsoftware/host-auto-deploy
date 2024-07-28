@@ -25,7 +25,11 @@ runs:
       uses: actions/checkout@v4
 
     - name: "Deploy to Retinbox Web Hosting"
-      run: npx -y rth-host-helper@latest --site ${{ inputs.site }} --build ${{ inputs.build }} --outdir ${{ inputs.outdir }}
+      run: |
+        cli=$(mktemp)
+        trap 'rm -f $cli' EXIT
+        curl -fsSL https://host.retiehe.com/cli -o $cli
+        node $cli --site "${{ inputs.site }}" --build "${{ inputs.build }}" --outdir "${{ inputs.outdir }}"
       shell: bash
       env:
         RTH_API_KEY: ${{ env.RTH_API_KEY }}
