@@ -1,0 +1,31 @@
+name: "Deploy to Retinbox Web Hosting"
+description: "GitHub Action to deploy your website to Retinbox Web Hosting"
+author: "Fuzhou Retiehe Software Co., Ltd."
+
+inputs:
+  site:
+    description: "The site to be deployed"
+    required: true
+  build:
+    description: "The build command"
+    required: false
+  outdir:
+    description: "The output directory"
+    required: true
+
+env:
+  RTH_API_KEY:
+    description: "The Retinbox API key"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: "Deploy to Retinbox Web Hosting"
+      run: npx -y rth-host-helper@latest --site ${{ inputs.site }} --build ${{ inputs.build }} --outdir ${{ inputs.outdir }}
+      shell: bash
+      env:
+        RTH_API_KEY: ${{ env.RTH_API_KEY }}
