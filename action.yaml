@@ -5,13 +5,13 @@ author: "Retinbox"
 inputs:
   site:
     description: "The site to be deployed"
-    required: true
+    required: false
   build:
     description: "The build command"
     required: false
   outdir:
     description: "The output directory"
-    required: true
+    required: false
 
 env:
   RTH_API_KEY:
@@ -26,10 +26,11 @@ runs:
 
     - name: "Deploy to Retinbox Web Hosting"
       run: |
-        cli=$(mktemp)
-        trap 'rm -f $cli' EXIT
-        curl -fsSL https://host.retiehe.com/cli -o $cli
-        node $cli --site "${{ inputs.site }}" --build "${{ inputs.build }}" --outdir "${{ inputs.outdir }}"
+        ARGS=()
+        [[ -n "${{ inputs.site }}" ]] && ARGS+=(--site "${{ inputs.site }}")
+        [[ -n "${{ inputs.build }}" ]] && ARGS+=(--build "${{ inputs.build }}")
+        [[ -n "${{ inputs.outdir }}" ]] && ARGS+=(--outdir "${{ inputs.outdir }}")
+        deno -Ar https://host.retiehe.com/cli "${ARGS[@]}"
       shell: bash
       env:
         RTH_API_KEY: ${{ env.RTH_API_KEY }}
