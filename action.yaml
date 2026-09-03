@@ -30,7 +30,7 @@ runs:
         [[ -n "${{ inputs.site }}" ]] && ARGS+=(--site "${{ inputs.site }}")
         [[ -n "${{ inputs.build }}" ]] && ARGS+=(--build "${{ inputs.build }}")
         [[ -n "${{ inputs.outdir }}" ]] && ARGS+=(--outdir "${{ inputs.outdir }}")
-        deno -Ar https://host.retiehe.com/cli "${ARGS[@]}"
+        deno -Ar https://host.retiehe.com/cli deploy "${ARGS[@]}"
       shell: bash
       env:
         RTH_API_KEY: ${{ env.RTH_API_KEY }}
